@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفنادق الجزائرية | حجز فاخر</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.2em;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        /* شريط البحث */
+        .search-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1.1em;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .search-box button {
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        /* أزرار التحكم */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            background: white;
+            color: #666;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        #piWalletButton {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        #piWalletButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.5);
+        }
+
+        /* شبكة الفنادق */
+        .hotels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .hotel-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.4s;
+            position: relative;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .hotel-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .hotel-rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #ffd700, #ffa500);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .hotel-price-tag {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .hotel-info {
+            padding: 20px;
+        }
+
+        .hotel-info h3 {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .hotel-location {
+            color: #666;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hotel-location::before {
+            content: "📍";
+            font-size: 1.2em;
+        }
+
+        .hotel-amenities {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .amenity {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .hotel-description {
+            color: #777;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin: 15px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* إحصائيات */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* الفوتر */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        /* رسائل التنبيه */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert.success { background: linear-gradient(135deg, #28a745, #20c997); }
+        .alert.error { background: linear-gradient(135deg, #dc3545, #c82333); }
+        .alert.info { background: linear-gradient(135deg, #17a2b8, #138496); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .header h1 { font-size: 2em; }
+            .search-box { flex-direction: column; }
+            .action-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <h1>🏨 <span>الفنادق الجزائرية</span></h1>
+            <p>اكتشف أفضل الفنادق في أجمل المدن الجزائرية</p>
+        </div>
+
+        <!-- شريط البحث -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث عن فندق أو مدينة..." value="">
+                <button onclick="searchHotels()">🔍 بحث</button>
+            </div>
+        </div>
+
+        <!-- أزرار التحكم -->
+        <div class="action-buttons">
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterHotels('all')">الكل</button>
+                <button class="filter-btn" onclick="filterHotels('الجزائر')">الجزائر</button>
+                <button class="filter-btn" onclick="filterHotels('وهران')">وهران</button>
+                <button class="filter-btn" onclick="filterHotels('قسنطينة')">قسنطينة</button>
+                <button class="filter-btn" onclick="filterHotels('عنابة')">عنابة</button>
+            </div>
+            <button id="piWalletButton">🔌 ربط محفظة Pi</button>
+        </div>
+
+        <!-- شبكة الفنادق -->
+        <div id="hotelsContainer" class="hotels-grid">
+            <!-- الفنادق ستظهر هنا -->
+        </div>
+
+        <!-- الإحصائيات -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number" id="hotelsCount">0</div>
+                <div class="stat-label">فندق متاح</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                <div class="stat-number" id="citiesCount">0</div>
+                <div class="stat-label">مدينة</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #ffd700, #ffa500);">
+                <div class="stat-number" id="ratingAvg">4.5</div>
+                <div class="stat-label">تقييم متوسط</div>
+            </div>
+        </div>
+
+        <!-- الفوتر -->
+        <div class="footer">
+            <p>© 2026 الفنادق الجزائرية - جميع الحقوق محفوظة</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">📍 الدفع عند الوصول | 💰 أسعار تنافسية | ⭐ خدمة ممتازة</p>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الفنادق مع صور حقيقية
+        const hotelsData = [
+            {
+                id: 1,
+                name: "فندق الأوراسي",
+                city: "الجزائر",
+                location: "شارع ديدوش مراد، الجزائر الوسطى",
+                price: 15000,
+                rating: 4.5,
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500",
+                description: "فندق فخم يطل على خليج الجزائر، يتميز بإطلالة بحرية رائعة وخدمة راقية.",
+                amenities: ["واي فاي", "مسبح", "سبا", "مطعم"]
+            },
+            {
+                id: 2,
+                name: "فندق الشيراتون",
+                city: "الجزائر",
+                location: "المحمدية، الجزائر",
+                price: 18000,
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=500",
+                description: "فندق عالمي فاخر يقع في قلب الجزائر العاصمة، قرب المراكز التجارية.",
+                amenities: ["واي فاي", "مسبح", "نادي صحي", "مواقف"]
+            },
+            {
+                id: 3,
+                name: "فندق سوفيتال",
+                city: "وهران",
+                location: "حي الصباح، وهران",
+                price: 14000,
+                rating: 4.4,
+                image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=500",
+                description: "فندق عصري في مدينة وهران، إطلالة على البحر وأجواء رومانسية.",
+                amenities: ["واي فاي", "مسبح", "شاطئ خاص", "كافيه"]
+            },
+            {
+                id: 4,
+                name: "فندق الهناء",
+                city: "قسنطينة",
+                location: "وسط المدينة، قسنطينة",
+                price: 12000,
+                rating: 4.2,
+                image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500",
+                description: "فندق مريح في مدينة الجسور المعلقة، قريب من المعالم السياحية.",
+                amenities: ["واي فاي", "مطعم", "مواقف", "خدمة غرف"]
+            },
+            {
+                id: 5,
+                name: "فندق الراحة",
+                city: "عنابة",
+                location: "شاطئ الرويبة، عنابة",
+                price: 13000,
+                rating: 4.3,
+                image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=500",
+                description: "فندق سياحي على شاطئ البحر، مثالي للعطلات الصيفية والاستجمام.",
+                amenities: ["واي فاي", "شاطئ", "مطعم", "تأجير سيارات"]
+            },
+            {
+                id: 6,
+                name: "فندق تيبازة",
+                city: "تيبازة",
+                location: "المنطقة السياحية، تيبازة",
+                price: 11000,
+                rating: 4.1,
+                image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500",
+                description: "فندق هادئ قريب من الآثار الرومانية وشاطئ البحر.",
+                amenities: ["واي فاي", "حديقة", "مطعم", "مواقف"]
+            }
+        ];
+
+        // متغيرات Pi
+        let piUser = null;
+        let isPiConnected = false;
+
+        // عرض الفنادق
+        function displayHotels(hotels) {
+            const container = document.getElementById('hotelsContainer');
+            if (!container) return;
+           
+            if (hotels.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 50px;">لا توجد فنادق متاحة</div>';
+                return;
+            }
+           
+            let html = '';
+            for (let i = 0; i < hotels.length; i++) {
+                const h = hotels[i];
+                const amenitiesHtml = h.amenities.map(a => `<span class="amenity">${a}</span>`).join('');
+               
+                html += `
+                    <div class="hotel-card">
+                        <div class="hotel-image" style="background-image: url('${h.image}')">
+                            <span class="hotel-rating">⭐ ${h.rating}</span>
+                            <span class="hotel-price-tag">💰 ${h.price.toLocaleString()} دج</span>
+                        </div>
+                        <div class="hotel-info">
+                            <h3>${h.name}</h3>
+                            <div class="hotel-location">${h.location}</div>
+                            <div class="hotel-amenities">${amenitiesHtml}</div>
+                            <div class="hotel-description">${h.description}</div>
+                            <button class="book-btn" onclick="bookHotel(${h.id})">احجز الآن</button>
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+           
+            // تحديث الإحصائيات
+            document.getElementById('hotelsCount').innerText = hotels.length;
+           
+            // حساب متوسط التقييم
+            let totalRating = 0;
+            for (let i = 0; i < hotels.length; i++) {
+                totalRating += hotels[i].rating;
+            }
+            const avg = (totalRating / hotels.length).toFixed(1);
+            document.getElementById('ratingAvg').innerText = avg;
+        }
+
+        // دالة البحث
+        window.searchHotels = function() {
+            const input = document.getElementById('searchInput');
+            if (!input) return;
+           
+            const word = input.value.toLowerCase().trim();
+           
+            if (word === '') {
+                displayHotels(hotelsData);
+                return;
+            }
+           
+            const result = [];
+            for (let i = 0; i < hotelsData.length; i++) {
+                const name = hotelsData[i].name.toLowerCase();
+                const city = hotelsData[i].city.toLowerCase();
+                if (name.includes(word) || city.includes(word)) {
+                    result.push(hotelsData[i]);
+                }
+            }
+           
+            displayHotels(result.length > 0 ? result : hotelsData);
+        }
+
+        // تصفية حسب المدينة
+        window.filterHotels = function(city) {
+            // تحديث الأزرار
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+           
+            if (city === 'all') {
+                displayHotels(hotelsData);
+                return;
+            }
+           
+            const result = [];
+            for (let i = 0; i < hotelsData.length; i++) {
+                if (hotelsData[i].city === city) {
+                    result.push(hotelsData[i]);
+                }
+            }
+            displayHotels(result);
+        }
+
+        // دالة الحجز
+        window.bookHotel = function(id) {
+            let hotelName = '';
+            for (let i = 0; i < hotelsData.length; i++) {
+                if (hotelsData[i].id === id) {
+                    hotelName = hotelsData[i].name;
+                    break;
+                }
+            }
+           
+            if (isPiConnected && piUser) {
+                showMessage(`✅ مرحباً ${piUser.username}! تم حجز ${hotelName} بنجاح. الدفع عند الوصول.`, 'success');
+            } else {
+                showMessage(`✅ تم حجز ${hotelName} بنجاح! الدفع عند الوصول.`, 'success');
+            }
+        }
+
+        // ربط محفظة Pi
+        window.connectPiWallet = function() {
+            const btn = document.getElementById('piWalletButton');
+           
+            if (isPiConnected) {
+                if (confirm('هل تريد قطع الاتصال؟')) {
+                    piUser = null;
+                    isPiConnected = false;
+                    btn.innerHTML = '🔌 ربط محفظة Pi';
+                    showMessage('تم قطع الاتصال', 'info');
+                }
+                return;
+            }
+           
+            // محاكاة تسجيل الدخول
+            piUser = { username: 'مسافر_' + Math.floor(Math.random() * 1000) };
+            isPiConnected = true;
+            btn.innerHTML = `💰 ${piUser.username}`;
+            showMessage(`✅ مرحباً ${piUser.username}! تم ربط المحفظة بنجاح.`, 'success');
+        }
+  // عرض الرسائل
+        function showMessage(text, type) {
+            const msg = document.createElement('div');
+            msg.className = `alert ${type}`;
+            msg.innerText = text;
+            document.body.appendChild(msg);
+           
+            setTimeout(() => {
+                msg.remove();
+            }, 3000);
+        }
+
+        // استعادة الجلسة
+        function restoreSession() {
+            const saved = localStorage.getItem('pi_user');
+            if (saved) {
+                try {
+                    piUser = JSON.parse(saved);
+                    isPiConnected = true;
+                    const btn = document.getElementById('piWalletButton');
+                    if (btn) btn.innerHTML = `💰 ${piUser.username}`;
+                } catch (e) {}
+            }
+        }
+
+        // حساب عدد المدن
+        function updateCitiesCount() {
+            const cities = {};
+            for (let i = 0; i < hotelsData.length; i++) {
+                cities[hotelsData[i].city] = true;
+            }
+            const count = Object.keys(cities).length;
+            document.getElementById('citiesCount').innerText = count;
+        }
+
+        // تشغيل عند التحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            displayHotels(hotelsData);
+            updateCitiesCount();
+            restoreSession();
+           
+            const piBtn = document.getElementById('piWalletButton');
+            if (piBtn) {
+                piBtn.addEventListener('click', connectPiWallet);
+            }
+           
+            // إضافة بحث عند الضغط على Enter
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        searchHotels();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
+
+
+ 
