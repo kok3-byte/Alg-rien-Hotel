@@ -1,141 +1,298 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F5F5F5">
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>حجز فنادق الجزائر - الدفع عبر تاست نت</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', 'Tahoma', sans-serif;
+        }
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#1A2B4C"
-        app:titleTextColor="@android:color/white"
-        app:title="فنادق الجزائر" />
+        body {
+            background: #f0f2f5;
+            padding: 20px;
+        }
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        /* بطاقة الفندق */
+        .hotel-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:layout_marginBottom="20dp">
+        .hotel-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1a2b4c, #2c3e66);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+        .hotel-info {
+            padding: 20px;
+        }
 
-                    <ImageView
-                        android:id="@+id/hotel_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/hotel_placeholder" />
+        .hotel-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a2b4c;
+        }
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:orientation="vertical">
+        .rating {
+            color: #f39c12;
+            margin: 8px 0;
+            font-size: 18px;
+        }
 
-                        <TextView
-                            android:id="@+id/hotel_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="هيلتون الجزائر"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A2B4C" />
+        .price {
+            color: #e74c3c;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
 
-                        <RatingBar
-                            android:id="@+id/hotel_rating"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:numStars="5"
-                            android:stepSize="0.5"
-                            android:rating="4.5"
-                            android:isIndicator="true" />
+        /* حقول الإدخال */
+        .input-group {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
 
-                        <TextView
-                            android:id="@+id/hotel_price"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="السعر: 15000 دج / ليلة"
-                            android:textSize="16sp"
-                            android:textColor="#E63946"
-                            android:layout_marginTop="8dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+        .input-group label {
+            display: block;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="عدد الليالي"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_marginBottom="16dp">
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+        }
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/nights_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+        .total {
+            background: #e8edf2;
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-            <TextView
-                android:id="@+id/total_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="المجموع: 15000 دج"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:background="#E8EDF2"
-                android:padding="12dp"
-                android:layout_marginBottom="20dp" />
+        /* زر الدفع */
+        .pay-btn {
+            width: 100%;
+            background: #1a2b4c;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 20px;
+        }
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/pay_button"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="الدفع عبر تاست نت"
-                android:textSize="16sp"
-                app:cornerRadius="28dp"
-                android:backgroundTint="#1A2B4C" />
+        .pay-btn:hover {
+            background: #0f1e38;
+        }
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/payment_card"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone">
+        /* WebView الدفع (يظهر عند الضغط) */
+        .payment-container {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            display: none;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-                <WebView
-                    android:id="@+id/payment_webview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </androidx.cardview.widget.CardView>
+        .payment-header {
+            background: #1a2b4c;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:visibility="gone" />
+        .payment-frame {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
 
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        .close-payment {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+            color: #1a2b4c;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #ddd;
+            border-top: 4px solid #1a2b4c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- بطاقة الفندق -->
+    <div class="hotel-card">
+        <div class="hotel-image">
+            🏨
+        </div>
+        <div class="hotel-info">
+            <div class="hotel-name">هيلتون الجزائر</div>
+            <div class="rating">★★★★☆ 4.5</div>
+            <div class="price" id="priceDisplay">السعر: 15,000 دج / ليلة</div>
+        </div>
+    </div>
+
+    <!-- عدد الليالي -->
+    <div class="input-group">
+        <label>📅 عدد الليالي</label>
+        <input type="number" id="nights" value="1" min="1">
+    </div>
+
+    <!-- المجموع -->
+    <div class="total" id="totalDisplay">المجموع: 15,000 دج</div>
+
+    <!-- زر الدفع -->
+    <button class="pay-btn" id="payBtn">💳 الدفع عبر تاست نت</button>
+
+    <!-- رسالة تحميل -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        جاري الاتصال ببوابة الدفع...
+    </div>
+
+    <!-- حاوية الدفع (تظهر عند الضغط) -->
+    <div class="payment-container" id="paymentContainer">
+        <div class="payment-header">🔒 بوابة الدفع الإلكتروني - تاست نت</div>
+        <iframe class="payment-frame" id="paymentFrame"></iframe>
+        <button class="close-payment" id="closePayment">✖ إغلاق</button>
+    </div>
+</div>
+
+<script>
+    // سعر الليلة
+    const pricePerNight = 15000;
+
+    // عناصر الصفحة
+    const nightsInput = document.getElementById('nights');
+    const totalDisplay = document.getElementById('totalDisplay');
+    const payBtn = document.getElementById('payBtn');
+    const paymentContainer = document.getElementById('paymentContainer');
+    const paymentFrame = document.getElementById('paymentFrame');
+    const closePaymentBtn = document.getElementById('closePayment');
+    const loadingDiv = document.getElementById('loading');
+
+    // تحديث المجموع عند تغيير عدد الليالي
+    function updateTotal() {
+        let nights = parseInt(nightsInput.value) || 1;
+        if (nights < 1) nights = 1;
+        const total = nights * pricePerNight;
+        totalDisplay.textContent = `المجموع: ${total.toLocaleString()} دج`;
+    }
+
+    nightsInput.addEventListener('input', updateTotal);
+    updateTotal();
+
+    // رابط API الخاص بك - يجب تغييره إلى رابط حقيقي من باي نتوورك
+    function getPaymentUrl(amount, hotelId) {
+        // هنا رابط تجريبي - استبدله برابط API الحقيقي
+        // مثال: https://api.paynetworx.dz/create-payment?amount=15000&hotel=1
+        return `https://sandbox.paynetworx.dz/pay?amount=${amount}&hotel_id=${hotelId}`;
+    }
+
+    // زر الدفع
+    payBtn.addEventListener('click', function() {
+        let nights = parseInt(nightsInput.value) || 1;
+        if (nights < 1) nights = 1;
+        const totalAmount = nights * pricePerNight;
+
+        // إظهار رسالة التحميل
+        loadingDiv.style.display = 'block';
+        paymentContainer.style.display = 'none';
+
+        // محاكاة الاتصال بالسيرفر للحصول على رابط الدفع
+        // في التطبيق الحقيقي، استخدم fetch() لإرسال البيانات إلى السيرفر الخاص بك
+        setTimeout(() => {
+            loadingDiv.style.display = 'none';
+
+            // رابط الدفع من تاست نت (استبدله بالرابط الحقيقي من API الخاص بك)
+            const paymentUrl = getPaymentUrl(totalAmount, 1);
+
+            // إظهار iframe الدفع
+            paymentFrame.src = paymentUrl;
+            paymentContainer.style.display = 'block';
+
+            // التمرير إلى حاوية الدفع
+            paymentContainer.scrollIntoView({ behavior: 'smooth' });
+        }, 1000);
+    });
+
+    // إغلاق نافذة الدفع
+    closePaymentBtn.addEventListener('click', function() {
+        paymentContainer.style.display = 'none';
+        paymentFrame.src = '';
+    });
+
+    // الاستماع لرسائل من iframe (عند انتهاء الدفع)
+    window.addEventListener('message', function(event) {
+        // التحقق من مصدر الرسالة (احرص على تأمينه حسب API الخاص بك)
+        if (event.data === 'payment_success') {
+            alert('✅ تم الدفع بنجاح! شكراً لحجزك.');
+            paymentContainer.style.display = 'none';
+            paymentFrame.src = '';
+        } else if (event.data === 'payment_failed') {
+            alert('❌ فشل الدفع. يرجى المحاولة مرة أخرى.');
+        }
+    });
+</script>
+
+</body>
+</html>
