@@ -1,6 +1,56 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <script src="https://minepi.com"></script>
+    <script>
+    // 1. تهيئة الـ SDK للعمل على الـ Testnet
+    Pi.init({ version: "2.0", sandbox: true });
+
+    // 2. وظيفة تسجيل الدخول والدفع
+    async function handlePiPayment() {
+        try {
+            // طلب إذن الدخول (Scopes)
+            const scopes = ['username', 'payments'];
+            const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+            
+            console.log("تم تسجيل الدخول بنجاح لـ: ", auth.user.username);
+
+            // بدء عملية الدفع بمبلغ 0.1 Pi (للتجربة)
+            const payment = await Pi.createPayment({
+                amount: 0.1,
+                memo: "حجز فندق - تطبيق Algerien Hotel",
+                metadata: { hotelName: "فندق التجربة", nights: 1 },
+            }, {
+                onReadyForServerApproval: (paymentId) => {
+                    console.log("الدفع بانتظار موافقة السيرفر، رقم الطلب: ", paymentId);
+                    // في الـ Testnet يمكنك محاكاة الموافقة أو انتظار تحديثات الـ SDK
+                },
+                onReadyForServerCompletion: (paymentId, txid) => {
+                    console.log("تم الدفع بنجاح! رقم المعاملة: ", txid);
+                    alert("تم الحجز بنجاح بـ Pi Testnet!");
+                },
+                onCancel: (paymentId) => {
+                    console.warn("تم إلغاء عملية الدفع.");
+                },
+                onError: (error, payment) => {
+                    console.error("حدث خطأ في عملية الدفع: ", error.message);
+                },
+            });
+        } catch (err) {
+            alert("يرجى فتح التطبيق من داخل Pi Browser لتتمكن من الدفع.");
+            console.error(err);
+        }
+    }
+
+    // وظيفة معالجة المدفوعات غير المكتملة (إلزامية من Pi)
+    function onIncompletePaymentFound(payment) {
+        console.log("يوجد دفع سابق معلق: ", payment.identifier);
+    };
+
+    // ربط الوظيفة بزر الدفع الخاص بك (تأكد أن الزر لديه id="payButton")
+    document.getElementById('payButton')?.addEventListener('click', handlePiPayment);
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الفنادق الجزائرية | حجز فاخر</title>
@@ -596,18 +646,77 @@
         }
 
         // ربط محفظة Pi
-        window.connectPiWallet = function() {
-            const btn = document.getElementById('piWalletButton');
-           
-            if (isPiConnected) {
-                if (confirm('هل تريد قطع الاتصال؟')) {
-                    piUser = null;
-                    isPiConnected = false;
-                    btn.innerHTML = '🔌 ربط محفظة Pi';
-                    showMessage('تم قطع الاتصال', 'info');
-                }
-                return;
+       !-- زر تسجيل الدخول -->
+        <button id="loginBtn">تسجيل الدخول بـ Pi</button>
+        
+        <!-- زر الدفع (يكون معطلاً حتى تسجيل الدخول) -->
+        <button id="payButton" style="display:none;">تأكيد الحجز والدفع</button>
+        
+        <div id="status" class="status">يرجى تسجيل الدخول أولاً</div>
+    </div>
+
+    <script>
+        // 1. تهيئة تطبيق Pi (وضعية التست نت)
+        Pi.init({ version: "2.0", sandbox: true });
+
+        const loginBtn = document.getElementById('loginBtn');
+        const payButton = document.getElementById('payButton');
+        const statusText = document.getElementById('status');
+
+        // 2. وظيفة تسجيل الدخول
+        loginBtn.onclick = async () => {
+            try {
+                const scopes = ['username', 'payments'];
+                const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+                
+                statusText.innerText = "مرحباً: " + auth.user.username;
+                loginBtn.style.display = "none";
+                payButton.style.display = "inline-block";
+            } catch (err) {
+                statusText.innerText = "خطأ في تسجيل الدخول. حاول من Pi Browser.";
             }
+        };
+
+        // 3. وظيفة الدفع الكاملة المعدلة
+        payButton.onclick = async () => {
+            statusText.innerText = "جاري تحضير عملية الدفع...";
+            
+            try {
+                const payment = await Pi.createPayment({
+                    amount: 0.1, // القيمة للتجربة
+                    memo: "حجز غرفة في فندق - الجزائر",
+                    metadata: { hotelId: "hotel_001", days: 1 },
+                }, {
+                    onReadyForServerApproval: (paymentId) => {
+                        statusText.innerText = "تم إرسال الطلب، بانتظار الموافقة...";
+                        // ملاحظة: في بيئة Testnet، يمكنك استخدام هذه الرابط البرمجي (Webhook) للمحاكاة
+                        console.log("Payment ID:", paymentId);
+                        // هنا يتم إخبار السيرفر أن الدفع بدأ (للتجربة تجاوزها يدوياً)
+                    },
+                    onReadyForServerCompletion: (paymentId, txid) => {
+                        statusText.innerText = "تم الدفع بنجاح! رقم العملية: " + txid;
+                        alert("مبروك! تم تأكيد حجزك في الفندق بنجاح.");
+                    },
+                    onCancel: (paymentId) => {
+                        statusText.innerText = "تم إلغاء عملية الدفع.";
+                    },
+                    onError: (error, payment) => {
+                        statusText.innerText = "حدث خطأ: " + error.message;
+                    },
+                });
+            } catch (err) {
+                statusText.innerText = "فشل بدء الدفع: " + err.message;
+            }
+        };
+
+        // معالجة المدفوعات العالقة (متطلب أساسي لـ Pi)
+        function onIncompletePaymentFound(payment) {
+            statusText.innerText = "لديك عملية دفع سابقة لم تكتمل.";
+            // يمكنك هنا إرسال معرف الدفع (payment.identifier) لسيرفرك لإكمالها
+        };
+    </script>
+</body>
+</html>
            
             // محاكاة تسجيل الدخول
             piUser = { username: 'مسافر_' + Math.floor(Math.random() * 1000) };
