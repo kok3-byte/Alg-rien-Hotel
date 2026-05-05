@@ -2,297 +2,620 @@
 <html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>حجز فنادق الجزائر - الدفع عبر تاست نت</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>سياحة الجزائر - حجز فنادق فاخرة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Cairo', 'Tahoma', sans-serif;
         }
 
         body {
-            background: #f0f2f5;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            color: #1a2a3e;
+        }
+
+        /* شريط التنقل */
+        .navbar {
+            background: linear-gradient(135deg, #0a1a2f, #0d2a44);
+            padding: 18px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: #d4af37;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .logo span:first-child {
+            color: #d4af37;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+        }
+
+        /* هيرو - صورة رئيسية */
+        .hero {
+            margin-top: 80px;
+            height: 65vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=1600') center/cover fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 52px;
+            font-weight: 800;
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p {
+            font-size: 22px;
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+
+        .hero-content i {
+            color: #d4af37;
+            margin: 0 5px;
+        }
+
+        /* فلتر البحث */
+        .filter-section {
+            max-width: 1200px;
+            margin: -30px auto 30px;
+            padding: 20px 30px;
+            background: white;
+            border-radius: 60px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 40px;
+            font-size: 15px;
+            font-family: 'Cairo', sans-serif;
+            background: #f9f9f9;
+            transition: 0.2s;
+        }
+
+        .filter-group select:focus, .filter-group input:focus {
+            border-color: #d4af37;
+            outline: none;
+            background: white;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #0a1a2f, #0d2a44);
+            color: white;
+            border: none;
+            padding: 0 35px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #d4af37, #b8960c);
+            color: #0a1a2f;
+        }
+
+        /* حاويات */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
             padding: 20px;
         }
 
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 40px 0 30px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #d4af37, #b8960c);
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        /* شبكة الفنادق */
+        .hotels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
         }
 
         /* بطاقة الفندق */
         .hotel-card {
             background: white;
-            border-radius: 24px;
+            border-radius: 28px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
         }
 
-        .hotel-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #1a2b4c, #2c3e66);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .hotel-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            height: 230px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .city-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
             color: white;
-            font-size: 48px;
-        }
-
-        .hotel-info {
-            padding: 20px;
-        }
-
-        .hotel-name {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1a2b4c;
-        }
-
-        .rating {
-            color: #f39c12;
-            margin: 8px 0;
-            font-size: 18px;
-        }
-
-        .price {
-            color: #e74c3c;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 8px;
-        }
-
-        /* حقول الإدخال */
-        .input-group {
-            background: white;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .input-group label {
-            display: block;
-            color: #555;
-            margin-bottom: 8px;
+            padding: 5px 12px;
+            border-radius: 25px;
+            font-size: 13px;
             font-weight: 500;
         }
 
-        .input-group input {
+        .city-badge i {
+            margin-left: 5px;
+            color: #d4af37;
+        }
+
+        .card-content {
+            padding: 22px;
+        }
+
+        .hotel-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0a1a2f;
+        }
+
+        .rating {
+            color: #d4af37;
+            margin: 8px 0;
+            letter-spacing: 2px;
+        }
+
+        .location {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .location i {
+            margin-left: 5px;
+            color: #d4af37;
+        }
+
+        .amenities {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .amenity {
+            background: #f0f2f5;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .price-night {
+            font-size: 22px;
+            font-weight: 800;
+            color: #d4af37;
+        }
+
+        .price-night small {
+            font-size: 13px;
+            font-weight: normal;
+            color: #888;
+        }
+
+        .book-btn {
+            background: #0a1a2f;
+            color: white;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .book-btn:hover {
+            background: #d4af37;
+            color: #0a1a2f;
+        }
+
+        /* نافذة الحجز المنبثقة */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 40px;
+            padding: 25px;
+            position: relative;
+            animation: fadeInUp 0.4s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-hotel-name {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 10px 0 5px;
+        }
+
+        .modal-price {
+            font-size: 28px;
+            color: #d4af37;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .modal input {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 12px;
+            border-radius: 30px;
+            margin: 10px 0;
             font-size: 16px;
             text-align: center;
         }
 
-        .total {
+        .modal-total {
             background: #e8edf2;
-            padding: 16px;
-            border-radius: 16px;
+            padding: 12px;
+            border-radius: 30px;
             text-align: center;
-            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin: 15px 0;
         }
 
-        /* زر الدفع */
-        .pay-btn {
+        .confirm-pay {
             width: 100%;
-            background: #1a2b4c;
+            background: #0a1a2f;
             color: white;
+            padding: 14px;
             border: none;
-            padding: 16px;
-            border-radius: 30px;
+            border-radius: 40px;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
-            margin-bottom: 20px;
+            margin-top: 10px;
         }
 
-        .pay-btn:hover {
-            background: #0f1e38;
-        }
-
-        /* WebView الدفع (يظهر عند الضغط) */
-        .payment-container {
-            background: white;
-            border-radius: 24px;
-            overflow: hidden;
-            display: none;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .payment-header {
-            background: #1a2b4c;
-            color: white;
-            padding: 12px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .payment-frame {
+        .payment-iframe {
             width: 100%;
-            height: 450px;
+            height: 400px;
             border: none;
-        }
-
-        .close-payment {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
+            border-radius: 20px;
+            margin-top: 15px;
             display: none;
-            color: #1a2b4c;
         }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #ddd;
-            border-top: 4px solid #1a2b4c;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
+        /* تذييل */
+        .footer {
+            background: #0a1a2f;
+            color: #ccc;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 20px;
+            }
+            .hero-content h1 {
+                font-size: 32px;
+            }
+            .filter-section {
+                border-radius: 30px;
+                margin: -50px 15px 20px;
+                padding: 20px;
+            }
+            .hotels-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
+<nav class="navbar">
+    <div class="logo">
+        <i class="fas fa-landmark"></i>
+        <span>سياحة</span><span>الجزائر</span>
+    </div>
+    <div class="nav-links">
+        <a href="#">الرئيسية</a>
+        <a href="#">فنادق</a>
+        <a href="#">عروض</a>
+        <a href="#">اتصل بنا</a>
+    </div>
+</nav>
+
+<div class="hero">
+    <div class="hero-content">
+        <h1><i class="fas fa-star-of-life"></i> اكتشف جمال الجزائر <i class="fas fa-star-of-life"></i></h1>
+        <p>بحر، جبال، صحراء .. وأفخم الفنادق بأفضل الأسعار</p>
+    </div>
+</div>
+
+<div class="filter-section">
+    <div class="filter-group">
+        <label><i class="fas fa-city"></i> المدينة</label>
+        <select id="cityFilter">
+            <option value="all">جميع المدن</option>
+            <option value="الجزائر">الجزائر العاصمة</option>
+            <option value="وهران">وهران</option>
+            <option value="قسنطينة">قسنطينة</option>
+            <option value="عنابة">عنابة</option>
+            <option value="تلمسان">تلمسان</option>
+            <option value="سطيف">سطيف</option>
+            <option value="بجاية">بجاية</option>
+            <option value="تيبازة">تيبازة</option>
+            <option value="جيجل">جيجل</option>
+            <option value="تيزي وزو">تيزي وزو</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label><i class="fas fa-search"></i> اسم الفندق</label>
+        <input type="text" id="searchHotel" placeholder="ابحث عن فندق...">
+    </div>
+    <button class="search-btn" id="applyFilter"><i class="fas fa-filter"></i> بحث</button>
+</div>
+
 <div class="container">
-    <!-- بطاقة الفندق -->
-    <div class="hotel-card">
-        <div class="hotel-image">
-            🏨
-        </div>
-        <div class="hotel-info">
-            <div class="hotel-name">هيلتون الجزائر</div>
-            <div class="rating">★★★★☆ 4.5</div>
-            <div class="price" id="priceDisplay">السعر: 15,000 دج / ليلة</div>
-        </div>
-    </div>
+    <div class="section-title">🏨 أفضل فنادق الجزائر</div>
+    <div class="hotels-grid" id="hotelsGrid"></div>
+</div>
 
-    <!-- عدد الليالي -->
-    <div class="input-group">
+<div class="footer">
+    <p><i class="fas fa-shield-alt"></i> دفع آمن عبر تاست نت | جميع الحقوق محفوظة © 2025</p>
+    <p style="margin-top: 10px;"><i class="fas fa-phone"></i> 0555 12 34 56</p>
+</div>
+
+<!-- نافذة الحجز -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2 id="modalHotelName" class="modal-hotel-name"></h2>
+        <div id="modalPrice" class="modal-price"></div>
         <label>📅 عدد الليالي</label>
-        <input type="number" id="nights" value="1" min="1">
-    </div>
-
-    <!-- المجموع -->
-    <div class="total" id="totalDisplay">المجموع: 15,000 دج</div>
-
-    <!-- زر الدفع -->
-    <button class="pay-btn" id="payBtn">💳 الدفع عبر تاست نت</button>
-
-    <!-- رسالة تحميل -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        جاري الاتصال ببوابة الدفع...
-    </div>
-
-    <!-- حاوية الدفع (تظهر عند الضغط) -->
-    <div class="payment-container" id="paymentContainer">
-        <div class="payment-header">🔒 بوابة الدفع الإلكتروني - تاست نت</div>
-        <iframe class="payment-frame" id="paymentFrame"></iframe>
-        <button class="close-payment" id="closePayment">✖ إغلاق</button>
+        <input type="number" id="modalNights" value="1" min="1">
+        <div id="modalTotal" class="modal-total"></div>
+        <button id="confirmPayBtn" class="confirm-pay">💳 الدفع عبر تاست نت</button>
+        <iframe id="paymentIframe" class="payment-iframe"></iframe>
     </div>
 </div>
 
 <script>
-    // سعر الليلة
-    const pricePerNight = 15000;
+    // بيانات الفنادق (جميع ولايات الجزائر)
+    const hotels = [
+        { id: 1, name: "هيلتون الجزائر", city: "الجزائر", price: 18000, rating: 4.8, location: "المحمدية, الجزائر العاصمة", amenities: ["مسبح", "SPA", "واي فاي مجاني"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800", bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" },
+        { id: 2, name: "شيراتون وهران", city: "وهران", price: 16500, rating: 4.7, location: "الكاناستيل, وهران", amenities: ["شاطئ خاص", "مطعم عالمي", "موقف سيارات"], image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" },
+        { id: 3, name: "ماريوت قسنطينة", city: "قسنطينة", price: 14500, rating: 4.6, location: "جسر قسنطينة", amenities: ["إطلالة رائعة", "جيم", "كافيه"], image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800" },
+        { id: 4, name: "سيبال عنابة", city: "عنابة", price: 14000, rating: 4.5, location: "شاطئ جنان الباي", amenities: ["شاطئ", "مسبح أولمبي", "تراس"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800" },
+        { id: 5, name: "فندق المهدي تلمسان", city: "تلمسان", price: 12500, rating: 4.4, location: "قرب حديقة لالة ستي", amenities: ["حدائق", "مقهى", "واي فاي"], image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800" },
+        { id: 6, name: "برج السطايف", city: "سطيف", price: 11000, rating: 4.3, location: "وسط المدينة", amenities: ["مركز تجاري", "واي فاي", "مطعم"], image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800" },
+        { id: 7, name: "فندق جرجورة بجاية", city: "بجاية", price: 12000, rating: 4.6, location: "شاطئ طارق", amenities: ["منظر بحر", "غرف عائلية", "إفطار مجاني"], image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800" },
+        { id: 8, name: "منتجع كولونيال تيبازة", city: "تيبازة", price: 13500, rating: 4.5, location: "شاطئ شنوة", amenities: ["منتجع صحي", "مسبح لا نهائي", "مطعم بحري"], image: "https://images.unsplash.com/photo-1562295304-3c2e3d2cbdbc?w=800" },
+        { id: 9, name: "الموزاييك جيجل", city: "جيجل", price: 11500, rating: 4.5, location: "تازة", amenities: ["غوص", "شاطئ", "مطعم"], image: "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800" },
+        { id: 10, name: "ميزاف تيزي وزو", city: "تيزي وزو", price: 10800, rating: 4.2, location: "منطقة بلفور", amenities: ["جبال", "هواء نقي", "موقد"], image: "https://images.unsplash.com/photo-1582229707537-084df9bf5e6b?w=800" },
+        { id: 11, name: "القطب الشمالي الجزائر", city: "الجزائر", price: 22000, rating: 4.9, location: "الجزائر وسط", amenities: ["علاج طبيعي", "يوجا", "طعام حلال"], image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" },
+        { id: 12, name: "رويال وهران أوشو", city: "وهران", price: 15500, rating: 4.7, location: "حي الصباح", amenities: ["بار وتراس", "حوض استحمام ساخن", "تكييف"], image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800" }
+    ];
 
-    // عناصر الصفحة
-    const nightsInput = document.getElementById('nights');
-    const totalDisplay = document.getElementById('totalDisplay');
-    const payBtn = document.getElementById('payBtn');
-    const paymentContainer = document.getElementById('paymentContainer');
-    const paymentFrame = document.getElementById('paymentFrame');
-    const closePaymentBtn = document.getElementById('closePayment');
-    const loadingDiv = document.getElementById('loading');
+    let selectedHotel = null;
 
-    // تحديث المجموع عند تغيير عدد الليالي
-    function updateTotal() {
-        let nights = parseInt(nightsInput.value) || 1;
-        if (nights < 1) nights = 1;
-        const total = nights * pricePerNight;
-        totalDisplay.textContent = `المجموع: ${total.toLocaleString()} دج`;
-    }
-
-    nightsInput.addEventListener('input', updateTotal);
-    updateTotal();
-
-    // رابط API الخاص بك - يجب تغييره إلى رابط حقيقي من باي نتوورك
-    function getPaymentUrl(amount, hotelId) {
-        // هنا رابط تجريبي - استبدله برابط API الحقيقي
-        // مثال: https://api.paynetworx.dz/create-payment?amount=15000&hotel=1
-        return `https://sandbox.paynetworx.dz/pay?amount=${amount}&hotel_id=${hotelId}`;
-    }
-
-    // زر الدفع
-    payBtn.addEventListener('click', function() {
-        let nights = parseInt(nightsInput.value) || 1;
-        if (nights < 1) nights = 1;
-        const totalAmount = nights * pricePerNight;
-
-        // إظهار رسالة التحميل
-        loadingDiv.style.display = 'block';
-        paymentContainer.style.display = 'none';
-
-        // محاكاة الاتصال بالسيرفر للحصول على رابط الدفع
-        // في التطبيق الحقيقي، استخدم fetch() لإرسال البيانات إلى السيرفر الخاص بك
-        setTimeout(() => {
-            loadingDiv.style.display = 'none';
-
-            // رابط الدفع من تاست نت (استبدله بالرابط الحقيقي من API الخاص بك)
-            const paymentUrl = getPaymentUrl(totalAmount, 1);
-
-            // إظهار iframe الدفع
-            paymentFrame.src = paymentUrl;
-            paymentContainer.style.display = 'block';
-
-            // التمرير إلى حاوية الدفع
-            paymentContainer.scrollIntoView({ behavior: 'smooth' });
-        }, 1000);
-    });
-
-    // إغلاق نافذة الدفع
-    closePaymentBtn.addEventListener('click', function() {
-        paymentContainer.style.display = 'none';
-        paymentFrame.src = '';
-    });
-
-    // الاستماع لرسائل من iframe (عند انتهاء الدفع)
-    window.addEventListener('message', function(event) {
-        // التحقق من مصدر الرسالة (احرص على تأمينه حسب API الخاص بك)
-        if (event.data === 'payment_success') {
-            alert('✅ تم الدفع بنجاح! شكراً لحجزك.');
-            paymentContainer.style.display = 'none';
-            paymentFrame.src = '';
-        } else if (event.data === 'payment_failed') {
-            alert('❌ فشل الدفع. يرجى المحاولة مرة أخرى.');
+    function displayHotels(filterCity = "all", searchTerm = "") {
+        const grid = document.getElementById("hotelsGrid");
+        grid.innerHTML = "";
+        let filtered = hotels.filter(h => {
+            const matchCity = filterCity === "all" || h.city === filterCity;
+            const matchSearch = h.name.includes(searchTerm) || h.city.includes(searchTerm);
+            return matchCity && matchSearch;
+        });
+        if (filtered.length === 0) {
+            grid.innerHTML = "<div style='text-align:center;padding:50px;'>❌ لا توجد فنادق مطابقة</div>";
+            return;
         }
-    });
-</script>
+        filtered.forEach(hotel => {
+            const card = document.createElement("div");
+            card.className = "hotel-card";
+            card.innerHTML = `
+                <div class="card-image" style="background-image: url('${hotel.image}'); background-size: cover;">
+                    <div class="city-badge"><i class="fas fa-map-marker-alt"></i> ${hotel.city}</div>
+                </div>
+                <div class="card-content">
+                    <div class="hotel-name">${hotel.name}</div>
+                    <div class="rating">${"★".repeat(Math.floor(hotel.rating))}${hotel.rating % 1 ? "½" : ""} ${hotel.rating}</div>
+                    <div class="location"><i class="fas fa-location-dot"></i> ${hotel.location}</div>
+                    <div class="amenities">${hotel.amenities.map(a => `<span class="amenity">${a}</span>`).join('')}</div>
+                    <div class="price-row">
+                        <span><span class="price-night">${hotel.price.toLocaleString()}</span> <small>دج/ليلة</small></span>
+                        <button class="book-btn" data-id="${hotel.id}">حجز الآن</button>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+        document.querySelectorAll(".book-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = parseInt(btn.getAttribute("data-id"));
+                selectedHotel = hotels.find(h => h.id === id);
+                openBookingModal(selectedHotel);
+            });
+        });
+    }
 
+    function openBookingModal(hotel) {
+        document.getElementById("modalHotelName").innerText = hotel.name;
+        document.getElementById("modalPrice").innerHTML = `${hotel.price.toLocaleString()} دج / ليلة`;
+        document.getElementById("modalNights").value = 1;
+        updateModalTotal(hotel);
+        document.getElementById("bookingModal").style.display = "flex";
+        document.getElementById("paymentIframe").style.display = "none";
+    }
+
+    function updateModalTotal(hotel) {
+        const nights = parseInt(document.getElementById("modalNights").value) || 1;
+        const total = nights * hotel.price;
+        document.getElementById("modalTotal").innerHTML = `💰 المجموع: ${total.toLocaleString()} دج`;
+    }
+
+    document.getElementById("modalNights").addEventListener("input", () => {
+        if (selectedHotel) updateModalTotal(selectedHotel);
+    });
+
+    document.getElementById("confirmPayBtn").addEventListener("click", () => {
+        const nights = parseInt(document.getElementById("modalNights").value) || 1;
+        const total = nights * selectedHotel.price;
+        // محاكاة رابط تاست نت (استبدله برابط API الحقيقي)
+        const paymentUrl = `https://sandbox.tasdattnet.dz/pay?amount=${total}&hotel=${selectedHotel.id}&nights=${nights}`;
+        const iframe = document.getElementById("paymentIframe");
+        iframe.style.display = "block";
+        iframe.src = paymentUrl;
+        document.getElementById("confirmPayBtn").style.display = "none";
+    });
+
+    document.querySelector(".close-modal").addEventListener("click", () => {
+        document.getElementById("bookingModal").style.display = "none";
+        document.getElementById("paymentIframe").src = "";
+        document.getElementById("confirmPayBtn").style.display = "block";
+    });
+
+    document.getElementById("applyFilter").addEventListener("click", () => {
+        const city = document.getElementById("cityFilter").value;
+        const search = document.getElementById("searchHotel").value;
+        displayHotels(city, search);
+    });
+
+    displayHotels();
+</script>
 </body>
 </html>
