@@ -1,97 +1,141 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algerien Hotel - Pi Network</title>
-    <!-- تضمين مكتبة Pi SDK -->
-    <script src="https://minepi.com"></script>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; padding: 20px; }
-        .card { background: white; border-radius: 15px; padding: 20px; max-width: 400px; margin: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        button { background-color: #673ab7; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 16px; margin-top: 15px; }
-        button:disabled { background-color: #ccc; }
-        .status { margin-top: 15px; color: #555; font-size: 14px; }
-    </style>
-</head>
-<body>
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
 
-    <div class="card">
-        <h1>تطبيق الفنادق الجزائرية</h1>
-        <p>احجز غرفتك وادفع بواسطة <b>Pi Testnet</b></p>
-        <hr>
-        <h3>فندق الأوراسي</h3>
-        <p>السعر: 0.1 Pi / ليلة</p>
-        
-        <!-- زر تسجيل الدخول -->
-        <button id="loginBtn">تسجيل الدخول بـ Pi</button>
-        
-        <!-- زر الدفع (يكون معطلاً حتى تسجيل الدخول) -->
-        <button id="payButton" style="display:none;">تأكيد الحجز والدفع</button>
-        
-        <div id="status" class="status">يرجى تسجيل الدخول أولاً</div>
-    </div>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#1A2B4C"
+        app:titleTextColor="@android:color/white"
+        app:title="فنادق الجزائر" />
 
-    <script>
-        // 1. تهيئة تطبيق Pi (وضعية التست نت)
-        Pi.init({ version: "2.0", sandbox: true });
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-        const loginBtn = document.getElementById('loginBtn');
-        const payButton = document.getElementById('payButton');
-        const statusText = document.getElementById('status');
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        // 2. وظيفة تسجيل الدخول
-        loginBtn.onclick = async () => {
-            try {
-                const scopes = ['username', 'payments'];
-                const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
-                
-                statusText.innerText = "مرحباً: " + auth.user.username;
-                loginBtn.style.display = "none";
-                payButton.style.display = "inline-block";
-            } catch (err) {
-                statusText.innerText = "خطأ في تسجيل الدخول. حاول من Pi Browser.";
-            }
-        };
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                android:layout_marginBottom="20dp">
 
-        // 3. وظيفة الدفع الكاملة المعدلة
-        payButton.onclick = async () => {
-            statusText.innerText = "جاري تحضير عملية الدفع...";
-            
-            try {
-                const payment = await Pi.createPayment({
-                    amount: 0.1, // القيمة للتجربة
-                    memo: "حجز غرفة في فندق - الجزائر",
-                    metadata: { hotelId: "hotel_001", days: 1 },
-                }, {
-                    onReadyForServerApproval: (paymentId) => {
-                        statusText.innerText = "تم إرسال الطلب، بانتظار الموافقة...";
-                        // ملاحظة: في بيئة Testnet، يمكنك استخدام هذه الرابط البرمجي (Webhook) للمحاكاة
-                        console.log("Payment ID:", paymentId);
-                        // هنا يتم إخبار السيرفر أن الدفع بدأ (للتجربة تجاوزها يدوياً)
-                    },
-                    onReadyForServerCompletion: (paymentId, txid) => {
-                        statusText.innerText = "تم الدفع بنجاح! رقم العملية: " + txid;
-                        alert("مبروك! تم تأكيد حجزك في الفندق بنجاح.");
-                    },
-                    onCancel: (paymentId) => {
-                        statusText.innerText = "تم إلغاء عملية الدفع.";
-                    },
-                    onError: (error, payment) => {
-                        statusText.innerText = "حدث خطأ: " + error.message;
-                    },
-                });
-            } catch (err) {
-                statusText.innerText = "فشل بدء الدفع: " + err.message;
-            }
-        };
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        // معالجة المدفوعات العالقة (متطلب أساسي لـ Pi)
-        function onIncompletePaymentFound(payment) {
-            statusText.innerText = "لديك عملية دفع سابقة لم تكتمل.";
-            // يمكنك هنا إرسال معرف الدفع (payment.identifier) لسيرفرك لإكمالها
-        };
-    </script>
-</body>
-</html>
+                    <ImageView
+                        android:id="@+id/hotel_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/hotel_placeholder" />
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/hotel_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="هيلتون الجزائر"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A2B4C" />
+
+                        <RatingBar
+                            android:id="@+id/hotel_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:numStars="5"
+                            android:stepSize="0.5"
+                            android:rating="4.5"
+                            android:isIndicator="true" />
+
+                        <TextView
+                            android:id="@+id/hotel_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="السعر: 15000 دج / ليلة"
+                            android:textSize="16sp"
+                            android:textColor="#E63946"
+                            android:layout_marginTop="8dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="عدد الليالي"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nights_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/total_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="المجموع: 15000 دج"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="#E8EDF2"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/pay_button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="الدفع عبر تاست نت"
+                android:textSize="16sp"
+                app:cornerRadius="28dp"
+                android:backgroundTint="#1A2B4C" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/payment_card"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
+
+                <WebView
+                    android:id="@+id/payment_webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </androidx.cardview.widget.CardView>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
